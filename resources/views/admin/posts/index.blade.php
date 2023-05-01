@@ -12,6 +12,7 @@
                         <thead>
                         <tr>
                             <th>Id</th>
+                            <th>Author</th>
                             <th>Title</th>
                             <th>Image</th>
                             <th>Created time</th>
@@ -21,6 +22,7 @@
                         <tfoot>
                         <tr>
                             <th>Id</th>
+                            <th>Author</th>
                             <th>Title</th>
                             <th>Image</th>
                             <th>Created time</th>
@@ -31,6 +33,7 @@
                         @foreach($posts as $post)
                         <tr>
                             <td>{{$post -> id}}</td>
+                            <td>{{$post -> user -> name}}</td>
                             <td>{{$post -> title}}</td>
                             <td><img height="40px" src="{{$post -> post_image}}" alt=""></td>
                             <td>{{$post -> created_at->diffForHumans()}}</td>
