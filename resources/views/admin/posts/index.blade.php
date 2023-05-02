@@ -7,6 +7,8 @@
             <div class="alert alert-danger">{!! Session::get('post-delete-message') !!}</div>
         @elseif(Session::has('post-create-message'))
             <div class="alert alert-success">{!! Session::get('post-create-message') !!}</div>
+        @elseif(Session::has('post-update-message'))
+            <div class="alert alert-success">{!! Session::get('post-update-message') !!}</div>
         @endif
 
         <div class="card shadow mb-4">
@@ -25,6 +27,7 @@
                             <th>Created time</th>
                             <th>Updated time</th>
                             <th>Delete</th>
+                            <th>Edit</th>
                         </tr>
                         </thead>
                         <tfoot>
@@ -36,6 +39,7 @@
                             <th>Created time</th>
                             <th>Updated time</th>
                             <th>Delete</th>
+                            <th>Edit</th>
                         </tr>
                         </tfoot>
                         <tbody>
@@ -52,6 +56,11 @@
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </td>
+                            <td>
+                                <form action="{{route('post.edit', $post->id)}}">
+                                    <button type="submit" class="btn btn-primary">Update</button>
                                 </form>
                             </td>
                         </tr>

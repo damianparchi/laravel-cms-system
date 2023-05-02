@@ -19,7 +19,7 @@ class PostController extends Controller
 
         $inputs = request() -> validate([
             'title' => 'required | min:6 | max:255',
-            'post_image' => 'file',
+            'post_image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'body' => 'required',
         ]);
 
@@ -53,5 +53,30 @@ class PostController extends Controller
 
         return back();
 
+    }
+
+    public function edit(Post $post) {
+
+        return view('admin.posts.update', compact('post'));
+    }
+
+    public function update(Post $post) {
+        $inputs = request()->validate([
+            'title' => 'required|min:6|max:255',
+            'body' => 'required',
+            'post_image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        if (request()->hasFile('post_image')) {
+            $path = request()->file('post_image')->store('images');
+
+            Artisan::call('storage:link');
+            $filename = basename(Storage::url($path));
+            $inputs['post_image'] = '/storage/images/' . $filename;
+        }
+
+        $post->update($inputs);
+        Session::flash('post-update-message', "The post ". '<b>'. $post->title .'</b>' ." has been deleted.");
+        return redirect()->route('post.index', $post);
     }
 }
