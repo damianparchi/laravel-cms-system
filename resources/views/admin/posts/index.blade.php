@@ -17,6 +17,7 @@
                             <th>Image</th>
                             <th>Created time</th>
                             <th>Updated time</th>
+                            <th>Delete</th>
                         </tr>
                         </thead>
                         <tfoot>
@@ -27,6 +28,7 @@
                             <th>Image</th>
                             <th>Created time</th>
                             <th>Updated time</th>
+                            <th>Delete</th>
                         </tr>
                         </tfoot>
                         <tbody>
@@ -35,9 +37,16 @@
                             <td>{{$post -> id}}</td>
                             <td>{{$post -> user -> name}}</td>
                             <td>{{$post -> title}}</td>
-                            <td><img height="40px" src="{{$post -> post_image}}" alt=""></td>
+                            <td><img height="40px" src="{{$post->post_image}}" alt=""></td>
                             <td>{{$post -> created_at->diffForHumans()}}</td>
                             <td>{{$post -> updated_at->diffForHumans()}}</td>
+                            <td>
+                                <form action="{{route('post.destroy', $post->id)}}" method="post">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </td>
                         </tr>
                         @endforeach
                         </tbody>

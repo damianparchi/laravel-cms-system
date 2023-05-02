@@ -20,16 +20,16 @@ class PostController extends Controller
 
         $inputs = request() -> validate([
             'title' => 'required | min:6 | max:255',
-            'post_image' => 'file:image',
+            'post_image' => 'file',
             'body' => 'required',
         ]);
 
         if(request()->hasFile('post_image')){
-            $path = request()->file('post_image')->store('public/images');
+            $path = request()->file('post_image')->store('images');
 
             Artisan::call('storage:link');
             $filename = basename(Storage::url($path));
-            $inputs['post_image'] = $filename;
+            $inputs['post_image'] = '/storage/images/' . $filename;
         }
 
 
@@ -42,5 +42,12 @@ class PostController extends Controller
         $posts = Post::all();
 
         return view('admin.posts.index', compact('posts'));
+    }
+
+    public function destroy(Post $post) {
+        $post->delete();
+
+        return back();
+
     }
 }
