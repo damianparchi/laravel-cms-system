@@ -2,6 +2,13 @@
     @section('content')
 
         <h1>All Posts</h1>
+
+        @if(Session::has('post-delete-message'))
+            <div class="alert alert-danger">{!! Session::get('post-delete-message') !!}</div>
+        @elseif(Session::has('post-create-message'))
+            <div class="alert alert-success">{!! Session::get('post-create-message') !!}</div>
+        @endif
+
         <div class="card shadow mb-4">
             <div class="card-header py-3">
                 <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>

@@ -3,10 +3,9 @@ namespace App\Http\Controllers;
 
 
 use App\Models\Post;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
-
 
 class PostController extends Controller
 {
@@ -34,7 +33,10 @@ class PostController extends Controller
 
 
         auth()->user()->posts()->create($inputs);
-        return back();
+
+        Session::flash('post-create-message', 'The post '. '<b>'. $inputs['title'] .'</b>' .' has been added.');
+
+        return redirect()->route('post.index');
     }
 
     public function index() {
@@ -46,6 +48,8 @@ class PostController extends Controller
 
     public function destroy(Post $post) {
         $post->delete();
+
+        Session::flash('post-delete-message', "The post ". '<b>'. $post->title .'</b>' ." has been deleted.");
 
         return back();
 
