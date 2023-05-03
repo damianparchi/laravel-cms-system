@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use function Symfony\Component\Translation\t;
 
 class User extends Authenticatable
 {
@@ -44,5 +45,13 @@ class User extends Authenticatable
 
     public function posts() {
         return $this -> hasMany(Post::class);
+    }
+
+    public function roles() {
+        return $this -> belongsToMany(Role::class);
+    }
+
+    public function permissions() {
+        return $this -> belongsToMany(Permission::class);
     }
 }
