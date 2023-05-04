@@ -11,9 +11,11 @@
             <div class="alert alert-success">{!! Session::get('post-update-message') !!}</div>
         @endif
 
+        @if(count($posts) > 0)
+
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
+                <h6 class="m-0 font-weight-bold text-primary">Posts datatable</h6>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -71,6 +73,11 @@
             </div>
         </div>
         {{$posts->links()}}
+        @else
+        <h1> There are no posts available. </h1>
+
+        @endif
+
     @endsection
 
     @section('scripts')

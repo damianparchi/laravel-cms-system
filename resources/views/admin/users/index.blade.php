@@ -7,6 +7,8 @@
             <div class="alert alert-danger">{!! Session::get('user-delete-message') !!}</div>
         @endif
 
+        @if(count($users) > 0)
+
         <div class="card shadow mb-4">
             <div class="card-header py-3">
                 <h6 class="m-0 font-weight-bold text-primary">Users datatable</h6>
@@ -70,6 +72,9 @@
             </div>
         </div>
         {{$users->links()}}
+        @else
+            <h1> There are no users available. </h1>
+        @endif
 
 
     @endsection
