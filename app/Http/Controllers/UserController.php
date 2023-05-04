@@ -36,4 +36,20 @@ class UserController extends Controller
 
 
     }
+
+    public function index() {
+        $users = User::paginate(5);
+
+        return view('admin.users.index', compact('users'));
+    }
+
+    public function destroy(User $user) {
+
+        $user -> delete();
+
+        session()->flash('user-delete-message', '<b>' . $user->username . '</b>' . ' has been deleted');
+
+        return back();
+
+    }
 }
