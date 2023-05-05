@@ -12,6 +12,8 @@ Route::delete('/users/destroy/{user}', [\App\Http\Controllers\UserController::cl
 
 Route::middleware(['role:admin', 'auth'])->group(function () {
     Route::get('/users', [App\Http\Controllers\UserController::class, 'index'])->name('users.index');
+    Route::put('/users/{user}/attach', [\App\Http\Controllers\UserController::class, 'attachRole'])->name('user.role.attach');
+    Route::put('/users/{user}/detach', [\App\Http\Controllers\UserController::class, 'detachRole'])->name('user.role.detach');
 
 });
 
