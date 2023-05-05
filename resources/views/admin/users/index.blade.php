@@ -60,7 +60,7 @@
                                     </form>
                                 </td>
                                 <td>
-                                    <form action="">
+                                    <form action="{{route('user.profile.show', $user->id)}}">
                                         <button type="submit" class="btn btn-primary">Update</button>
                                     </form>
                                 </td>
