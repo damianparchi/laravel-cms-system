@@ -17,7 +17,11 @@
                     </div>
                     <button type="submit" class="btn btn-primary btn-block">Create</button>
                     @if(Session::has('role-delete-message'))
-                        <div class="alert alert-danger">{!! Session::get('role-delete-message') !!}</div>
+                        <div class="mt-2 alert alert-danger">{!! Session::get('role-delete-message') !!}</div>
+                    @elseif(Session::has('role-update-message'))
+                        <div class="mt-2 alert alert-success">{!! Session::get('role-update-message') !!}</div>
+                    @elseif(Session::has('role-nothing-message'))
+                        <div class="mt-2 alert alert-primary">{!! Session::get('role-nothing-message') !!}</div>
                     @endif
                 </form>
 
@@ -63,7 +67,9 @@
                                             </form>
                                         </td>
                                         <td>
-                                            <form action="">
+                                            <form action="{{route('roles.edit', $role)}}" method="post">
+                                                @csrf
+                                                @method('GET')
                                                 <button type="submit" class="btn btn-primary">Update</button>
                                             </form>
                                         </td>
