@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
@@ -12,7 +14,9 @@ class CommentController extends Controller
     public function index()
     {
 
-        return view('admin.comments.index');
+        $comments = Comment::all();
+
+        return view('admin.comments.index', compact('comments'));
     }
 
     /**
@@ -28,8 +32,24 @@ class CommentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $user = Auth::user();
+        $data = [
+          'post_id' => $request->post_id,
+          'author' => $user->name,
+          'email' => $user->email,
+          'body' => $request->body,
+          'avatar' => $user->avatar,
+
+        ];
+
+        Comment::create($data);
+
+        $request->session()->flash('comment-added-message', 'Comment has been added.');
+
+        return back();
     }
+
 
     /**
      * Display the specified resource.
