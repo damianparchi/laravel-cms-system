@@ -30,4 +30,8 @@ class Post extends Model
     public function getPostImageAttribute($value) {
         return asset($value);
     }
+
+    public function comments() {
+        return $this->hasMany(Comment::class);
+    }
 }

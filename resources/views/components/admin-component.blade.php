@@ -68,6 +68,8 @@
 
         @endif
 
+        <x-admin.sidebar.comments-links></x-admin.sidebar.comments-links>
+
 
 
         <!-- Nav Item - Utilities Collapse Menu -->
