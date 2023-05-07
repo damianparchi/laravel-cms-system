@@ -20,8 +20,8 @@ class PermissionController extends Controller
         ]);
 
         $permission->create([
-            'name'=> ucfirst(request('name')),
-            'slug'=> strtolower(request('name')),
+            'name' => ucfirst(request('name')),
+            'slug' => Str::of(request('name'))->slug('-')
         ]);
 
         return back();
@@ -37,5 +37,22 @@ class PermissionController extends Controller
     public function edit(Permission $permission) {
 
         return view('admin.permissions.edit',  compact('permission'));
+    }
+
+    public function update(Permission $permission) {
+
+        $oldname = $permission -> name;
+
+        $permission -> name = ucfirst(request('name'));
+        $permission -> slug = str()->of(request('name'))->slug('-');
+
+        if($permission->isDirty('name')) {
+            $permission -> save();
+            session()->flash('permissions-update-message', 'Permission ' . '<b>' . $oldname . '</b>' . ' has been updated to ' . '<b>' . $permission->name . '</b>.');
+        } else {
+            session()->flash('permissions-update-message', 'Nothing has been updated.');
+        }
+
+        return redirect('/admin/permissions');
     }
 }

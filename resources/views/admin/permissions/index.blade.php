@@ -7,9 +7,17 @@
                     @csrf
                     <div class="form-group">
                         <label for="name">Name</label>
-                        <input type="text" class="form-control" name="name" id="">
+                        <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" id="name">
+                    </div>
+                    <div>
+                        @error('name')
+                            <span><strong>{{$message}}</strong></span>
+                        @enderror
                     </div>
                     <button type="submit" class="btn btn-primary btn-block">Create</button>
+                        @if(Session::has('permissions-update-message'))
+                            <div class="mt-2 alert alert-success">{!! Session::get('permissions-update-message') !!}</div>
+                        @endif
                 </form>
             </div>
 
