@@ -40,11 +40,7 @@ class PostController extends Controller
     }
 
     public function index() {
-        if (auth()->user()->roles()->first()->slug == "admin") {
-            $posts = Post::paginate(5);
-        } else {
-            $posts = auth()->user()->posts()->paginate(5);
-        }
+        $posts = auth()->user()->userHasRole('Admin') ? Post::paginate(5) : auth()->user()->posts()->paginate(5);
 
         return view('admin.posts.index', compact('posts'));
     }
