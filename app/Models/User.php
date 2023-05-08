@@ -44,6 +44,15 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public static function boot() {
+        parent::boot();
+
+        static::created(function ($user) {
+            $user->roles()->attach(Role::where('name','User')->first());
+        });
+
+    }
+
     public function setPasswordAttribute($value) {
         $this -> attributes['password'] = bcrypt($value);
     }
