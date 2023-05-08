@@ -72,7 +72,15 @@ class CommentController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $comment = Comment::findOrFail($id);
+        $is_active = $request->has('approve') ? 1 : 0;
+        $comment->update(['is_active' => $is_active]);
+
+        if ($is_active) {
+            return back()->with('comment-approve-message', 'Comment of user ' . '<b>' . $comment->author . '</b>' . ' has been approved.');
+        } else {
+            return back()->with('comment-unapprove-message', 'Comment of user ' . '<b>' . $comment->author . '</b>' . ' has been unapproved.');
+        }
     }
 
     /**
@@ -80,6 +88,10 @@ class CommentController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $comment = Comment::find($id);
+        $author = $comment -> author;
+        $comment -> delete();
+
+        return back()->with('comment-delete-message','Comment of user ' . '<b>' . $author .'</b>' . ' has been deleted.');;
     }
 }
