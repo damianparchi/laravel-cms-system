@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Models\Comment;
 use App\Models\Post;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Session;
@@ -9,12 +10,21 @@ use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
-    public function show(Post $post) {
-        return view('blog-post', compact('post'));
+    public function show(Post $post)
+    {
+        $comments = Comment::where('post_id', $post->id)
+            ->where('is_active', 1)
+            ->orderBy('created_at', 'desc')
+            ->paginate(5);
+
+        return view('blog-post', compact('post', 'comments'))
+            ->with('noComments', !$comments->count());
     }
+
     public function create() {
         return view ('admin.posts.create');
     }
+
     public function store() {
 
         $inputs = request() -> validate([

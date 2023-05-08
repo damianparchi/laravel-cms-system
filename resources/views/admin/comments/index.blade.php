@@ -12,8 +12,8 @@
             @elseif(Session::has('comment-unapprove-message'))
                 <div class="mt-2 alert alert-warning">{!! Session::get('comment-unapprove-message') !!}</div>
             @endif
-
-                <div class="col-sm-9">
+            <div class="row">
+                <div class="col-sm-12">
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
                             <h6 class="m-0 font-weight-bold text-primary">Comments datatable</h6>
@@ -49,7 +49,7 @@
                                     @foreach($comments as $comment)
                                         <tr>
                                             <td>{{$comment->id}}</td>
-                                            <td><a href="{{route('post', $comment->post_id)}}">View Post</a></td>
+                                            <td><a href="{{route('post', $comment->post_id)}}">View Post - {{$comment->post_id}}</a></td>
                                             <td>{{$comment->author}}</td>
                                             <td>{{$comment->email}}</td>
                                             <td><img height="40px" alt="" src="{{$comment->avatar}}"></td>
@@ -94,6 +94,5 @@
         @else
             <h1>There is no comments available.</h1>
         @endif
-
     @endsection
 </x-admin-component>
