@@ -25,6 +25,7 @@
                             <th>Id</th>
                             <th>Author</th>
                             <th>Title</th>
+                            <th>Comments</th>
                             <th>Image</th>
                             <th>Created time</th>
                             <th>Updated time</th>
@@ -37,6 +38,7 @@
                             <th>Id</th>
                             <th>Author</th>
                             <th>Title</th>
+                            <th>Comments</th>
                             <th>Image</th>
                             <th>Created time</th>
                             <th>Updated time</th>
@@ -49,7 +51,8 @@
                         <tr>
                             <td>{{$post -> id}}</td>
                             <td>{{$post -> user -> name}}</td>
-                            <td>{{$post -> title}}</td>
+                            <td><a href="{{route('post', $post)}}">{{$post -> title}}</a></td>
+                            <td><a href="{{route('admin.comments.show', $post)}}">View Comments</a></td>
                             <td><img height="40px" src="{{$post->post_image}}" alt=""></td>
                             <td>{{$post -> created_at->diffForHumans()}}</td>
                             <td>{{$post -> updated_at->diffForHumans()}}</td>

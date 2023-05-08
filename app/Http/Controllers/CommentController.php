@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comment;
+use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -45,7 +46,7 @@ class CommentController extends Controller
 
         Comment::create($data);
 
-        $request->session()->flash('comment-added-message', 'Comment has been added.');
+        $request->session()->flash('comment-added-message', 'Comment has been added and waiting for being posted by admin.');
 
         return back();
     }
@@ -56,7 +57,10 @@ class CommentController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $post = Post::findOrFail($id);
+        $comments = $post -> comments;
+
+        return view('admin.comments.show', compact('comments'));
     }
 
     /**
