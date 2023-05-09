@@ -15,8 +15,9 @@ return new class extends Migration
             $table->id();
             $table->integer('comment_id')->constrained()->onDelete('cascade');
             $table->integer('is_active')->default(0);
-            $table->string('author');
-            $table->string('email');
+            $table->text('avatar')->nullable();
+            $table->text('email');
+            $table->text('author');
             $table->text('body');
             $table->timestamps();
         });

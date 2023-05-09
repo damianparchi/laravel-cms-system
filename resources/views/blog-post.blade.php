@@ -51,26 +51,49 @@
             </div>
         </div>
 
-   @endif
-        <!-- Single Comment -->
-    @if($comments->count() > 0)
-        @foreach($comments as $comment)
-            <div class="media mb-4">
-                <img class="d-flex mr-3 rounded-circle" height="50px" src="{{$comment->avatar}}" alt="">
-                <div class="media-body">
-                    <h5 class="mt-0">{{$comment->author}} <small>({{$comment->created_at->diffForHumans()}})</small></h5>
-                    <input type="hidden" name="post_id" value="{{$comment->post_id}}">
-                    <textarea class="form-control" rows="3">{{$comment->body}}</textarea>
-                </div>
-            </div>
-        @endforeach
-
-        {{$comments->links()}}
-
-    @else
-        <div class="alert alert-info">There are no comments yet.</div>
     @endif
-</div>
+        <!-- Single Comment -->
+    @forelse($comments as $comment)
+        <div class="media mb-4">
+            <img class="d-flex mr-3 fa-behance-square" height="50px" src="{{$comment->avatar}}" alt="">
+            <div class="media-body">
+                <h5 class="mt-0">{{$comment->author}}</h5><small>({{$comment->created_at->diffForHumans()}})</small>
+                <input type="hidden" name="post_id" value="{{$comment->post_id}}">
+                <p>{{$comment->body}}</p>
+
+                <!--  Nested comment -->
+                @forelse($comment->replies as $reply)
+                    <div class="media mt-4 ms-5">
+                        <img class="d-flex mr-3 fa-behance-square" height="50px" src="{{$reply->avatar}}" alt="">
+                        <div class="media-body">
+                            <h5 class="mt-0">{{$reply->author}} <small>({{$reply->created_at->diffForHumans()}})</small></h5>
+                            <p>{{$reply->body}}</p>
+                        </div>
+                    </div>
+
+                @empty
+                    <p>No replies yet.</p>
+                @endforelse
+
+                <form method="post" action="{{route('admin.comments.reply')}}">
+                    @csrf
+                    <div class="form-group ms-5">
+                        <input type="hidden" name="comment_id" value="{{$comment->id}}">
+                        <textarea class="form-control" name="body" rows="1"></textarea>
+                        <button type="submit" class="mt-2 btn btn-primary">Submit reply</button>
+                    </div>
+                </form>
+                <!--  End nested comment -->
+
+            </div>
+        </div>
+    @empty
+        <div class="alert alert-info">There are no comments yet.</div>
+    @endforelse
+
+    {{$comments->links()}}
+
+    </div>
     @endsection
 
 </x-home-component>

@@ -12,7 +12,8 @@ class PostController extends Controller
 {
     public function show(Post $post)
     {
-        $comments = Comment::where('post_id', $post->id)
+        $comments = Comment::with('replies')
+            ->where('post_id', $post->id)
             ->where('is_active', 1)
             ->orderBy('created_at', 'desc')
             ->paginate(5);

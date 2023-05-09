@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CommentReply;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CommentRepliesController extends Controller
 {
@@ -60,5 +62,24 @@ class CommentRepliesController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function createReply(Request $request) {
+
+        $user = Auth::user();
+        $data = [
+            'comment_id' => $request->comment_id,
+            'author' => $user->name,
+            'email' => $user->email,
+            'body' => $request->body,
+            'avatar' => $user->avatar,
+
+        ];
+
+        CommentReply::create($data);
+
+        $request->session()->flash('reply-added-message', 'Reply has been added and waiting for being posted by admin.');
+
+        return back();
     }
 }
