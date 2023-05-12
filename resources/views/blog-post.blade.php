@@ -63,26 +63,30 @@
 
                 <!--  Nested comment -->
                 @forelse($comment->replies as $reply)
-                    <div class="media mt-4 ms-5">
-                        <img class="d-flex mr-3 fa-behance-square" height="50px" src="{{$reply->avatar}}" alt="">
-                        <div class="media-body">
-                            <h5 class="mt-0">{{$reply->author}} <small>({{$reply->created_at->diffForHumans()}})</small></h5>
-                            <p>{{$reply->body}}</p>
+                        <div class="media mt-4 ms-5">
+                            <img class="d-flex mr-3 fa-behance-square" height="50px" src="{{$reply->avatar}}" alt="">
+                            <div class="media-body">
+                                <h5 class="mt-0">{{$reply->author}} <small>({{$reply->created_at->diffForHumans()}})</small></h5>
+                                <p>{{$reply->body}}</p>
+                            </div>
                         </div>
-                    </div>
 
                 @empty
                     <p>No replies yet.</p>
                 @endforelse
-
-                <form method="post" action="{{route('admin.comments.reply')}}">
-                    @csrf
-                    <div class="form-group ms-5">
-                        <input type="hidden" name="comment_id" value="{{$comment->id}}">
-                        <textarea class="form-control" name="body" rows="1"></textarea>
-                        <button type="submit" class="mt-2 btn btn-primary">Submit reply</button>
+                <div class="comment-reply-container">
+                    <button class="toggle-reply btn btn-primary mb-3">Reply</button>
+                    <div class="comment-reply">
+                        <form method="post" action="{{route('admin.comments.reply')}}">
+                            @csrf
+                            <div class="form-group ms-5">
+                                <input type="hidden" name="comment_id" value="{{$comment->id}}">
+                                <textarea class="form-control" name="body" rows="1"></textarea>
+                                <button type="submit" class="mt-2 btn btn-primary">Submit reply</button>
+                            </div>
+                        </form>
                     </div>
-                </form>
+                </div>
                 <!--  End nested comment -->
 
             </div>
@@ -97,3 +101,10 @@
     @endsection
 
 </x-home-component>
+
+<script>
+    $(".comment-reply-container .toggle-reply").click(function (){
+        $(this).next().slideToggle("slow");
+        $(this).slideToggle("slow");
+    })
+</script>
