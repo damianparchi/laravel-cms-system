@@ -2,20 +2,30 @@
 
 namespace App\Models;
 
+
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+
 
 class Post extends Model
 {
     use HasFactory;
+    use Sluggable;
+
+    /**
+     * Sluggable configuration.
+     *
+     * @var array
+     */
 
     protected $fillable = [
         'user_id',
         'title',
         'post_image',
-        'body'
+        'body',
+		'slug'
     ];
-
 
     public function user() {
         return $this -> belongsTo(User::class);
@@ -33,5 +43,14 @@ class Post extends Model
 
     public function comments() {
         return $this->hasMany(Comment::class);
+    }
+
+    public function sluggable(): array{
+        return [
+            'slug' => [
+                'source' => 'title',
+                'unique' => true
+            ]
+        ];
     }
 }

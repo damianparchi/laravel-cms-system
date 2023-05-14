@@ -2,8 +2,9 @@
 namespace App\Http\Controllers;
 
 
-use App\Models\Comment;
+
 use App\Models\Post;
+use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -54,15 +55,14 @@ class PostController extends Controller
      *     )
      * )
      */
-    public function show(Post $post)
+    public function show($slug)
     {
-        $comments = Comment::with('replies')
-            ->where('post_id', $post->id)
-            ->where('is_active', 1)
-            ->orderBy('created_at', 'desc')
-            ->paginate(5);
 
-        if(request()->wantsJson()) {
+        $post = Post::where('slug', $slug)->firstOrFail();
+
+        $comments = $post->comments()->where('is_active', 1)->orderBy('created_at', 'desc')->paginate(5);
+
+        if (request()->wantsJson()) {
             return response()->json([
                 'post' => $post,
                 'comments' => $comments
@@ -138,13 +138,15 @@ class PostController extends Controller
             'post_image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'body' => 'required',
         ]);
-
+        $inputs['slug'] = SlugService::createSlug(Post::class, 'slug', request('title'));
         if(request()->hasFile('post_image')){
             $path = request()->file('post_image')->store('images');
 
             Artisan::call('storage:link');
             $filename = basename(Storage::url($path));
             $inputs['post_image'] = '/storage/images/' . $filename;
+
+
         }
 
 
