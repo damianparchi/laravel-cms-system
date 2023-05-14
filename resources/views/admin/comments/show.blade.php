@@ -2,7 +2,7 @@
     @section('content')
 
 
-        @if($comments)
+        @if(count($comments) > 0)
             <h1>Comments</h1>
 
             @if(Session::has('comment-delete-message'))
@@ -53,7 +53,7 @@
                                     <tr>
                                         <td>{{$comment->id}}</td>
                                         <td>{{$comment->post_id}}</td>
-                                        <td><a href="{{route('post', $comment->post_id)}}">View Post</a></td>
+                                        <td><a href="{{route('reply.show', $comment->id)}}">View Replies</a></td>
                                         <td>{{$comment->author}}</td>
                                         <td>{{$comment->email}}</td>
                                         <td><img height="40px" alt="" src="{{$comment->avatar}}"></td>

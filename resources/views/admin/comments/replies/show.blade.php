@@ -2,21 +2,21 @@
     @section('content')
 
 
-        @if(count($comments) > 0)
-            <h1>Comments</h1>
+        @if(count($replies) > 0)
+            <h1>Replies</h1>
 
-            @if(Session::has('comment-delete-message'))
-                <div class="mt-2 alert alert-danger">{!! Session::get('comment-delete-message') !!}</div>
-            @elseif(Session::has('comment-approve-message'))
-                <div class="mt-2 alert alert-success">{!! Session::get('comment-approve-message') !!}</div>
-            @elseif(Session::has('comment-unapprove-message'))
-                <div class="mt-2 alert alert-warning">{!! Session::get('comment-unapprove-message') !!}</div>
+            @if(Session::has('reply-delete-message'))
+                <div class="mt-2 alert alert-success">{!! Session::get('reply-delete-message') !!}</div>
+            @elseif(Session::has('reply-approve-message'))
+                <div class="mt-2 alert alert-success">{!! Session::get('reply-approve-message') !!}</div>
+            @elseif(Session::has('reply-unapprove-message'))
+                <div class="mt-2 alert alert-warning">{!! Session::get('reply-unapprove-message') !!}</div>
             @endif
             <div class="row">
                 <div class="col-sm-12">
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Comments datatable</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">Replies datatable</h6>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -24,12 +24,12 @@
                                     <thead>
                                     <tr>
                                         <th>Id</th>
-                                        <th>Reply</th>
-                                        <th>Post Id</th>
                                         <th>Author</th>
-                                        <th>Email</th>
                                         <th>Avatar</th>
                                         <th>Body</th>
+                                        <th>Post</th>
+                                        <th>Created at</th>
+                                        <th>Updated at</th>
                                         <th>Approve/Unapprove</th>
                                         <th>Delete</th>
                                     </tr>
@@ -37,29 +37,29 @@
                                     <tfoot>
                                     <tr>
                                         <th>Id</th>
-                                        <th>Reply</th>
-                                        <th>Post Id</th>
                                         <th>Author</th>
-                                        <th>Email</th>
                                         <th>Avatar</th>
                                         <th>Body</th>
+                                        <th>Post</th>
+                                        <th>Created at</th>
+                                        <th>Updated at</th>
                                         <th>Approve/Unapprove</th>
                                         <th>Delete</th>
                                     </tr>
                                     </tfoot>
                                     <tbody>
-                                    @foreach($comments as $comment)
+                                    @foreach($replies as $reply)
                                         <tr>
-                                            <td>{{$comment->id}}</td>
-                                            <td><a href="{{route('reply.show', $comment->id)}}">View Replies</a></td>
-                                            <td><a href="{{route('post', $comment->post_id)}}">View Post - {{$comment->post_id}}</a></td>
-                                            <td>{{$comment->author}}</td>
-                                            <td>{{$comment->email}}</td>
-                                            <td><img height="40px" alt="" src="{{$comment->avatar}}"></td>
-                                            <td>{{$comment->body}}</td>
+                                            <td>{{$reply->id}}</td>
+                                            <td>{{$reply->author}}</td>
+                                            <td><img height="40px" alt="" src="{{$reply->avatar}}"></td>
+                                            <td>{{$reply->body}}</td>
+                                            <td><a href="{{route('post', $reply->comment->post_id)}}">View Post</a></td>
+                                            <td>{{$reply->created_at->diffForHumans()}}</td>
+                                            <td>{{$reply->updated_at->diffForHumans()}}</td>
                                             <td>
-                                                @if($comment->is_active)
-                                                    <form method="post" action="{{route('admin.comments.update', $comment)}}">
+                                                @if($reply->is_active)
+                                                    <form method="post" action="{{route('reply.update', $reply)}}">
                                                         @csrf
                                                         @method("PUT")
                                                         <input type="hidden" name="is_active" value="0">
@@ -68,7 +68,7 @@
                                                         </div>
                                                     </form>
                                                 @else
-                                                    <form method="post" action="{{route('admin.comments.update', $comment)}}">
+                                                    <form method="post" action="{{route('reply.update', $reply)}}">
                                                         @csrf
                                                         @method("PUT")
                                                         <input type="hidden" name="is_active" value="1">
@@ -79,12 +79,13 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                <form action="{{route('admin.comments.destroy', $comment)}}" method="post">
+                                                <form action="{{route('reply.destroy', $reply)}}" method="">
                                                     @csrf
                                                     @method("DELETE")
-                                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                                    <button class="btn btn-danger">Delete</button>
                                                 </form>
                                             </td>
+
                                         </tr>
                                     @endforeach
                                     </tbody>
@@ -95,8 +96,9 @@
                 </div>
             </div>
         @else
-            <h1>There is no comments available.</h1>
+            <h1>There is no replies available.</h1>
         @endif
-            {{$comments->links()}}
+        {{$replies->links()}}
     @endsection
+
 </x-admin-component>

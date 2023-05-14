@@ -32,6 +32,10 @@
             <div class="alert alert-success">
                 {{session('comment-added-message')}}
             </div>
+        @elseif(Session::has('reply-added-message'))
+            <div class="alert alert-success">
+                {{session('reply-added-message')}}
+            </div>
         @endif
 
     @if(Auth::check())
@@ -63,6 +67,7 @@
 
                 <!--  Nested comment -->
                 @forelse($comment->replies as $reply)
+                    @if($reply->is_active == 1)
                         <div class="media mt-4 ms-5">
                             <img class="d-flex mr-3 fa-behance-square" height="50px" src="{{$reply->avatar}}" alt="">
                             <div class="media-body">
@@ -70,13 +75,13 @@
                                 <p>{{$reply->body}}</p>
                             </div>
                         </div>
-
+                    @endif
                 @empty
                     <p>No replies yet.</p>
                 @endforelse
                 <div class="comment-reply-container">
                     <button class="toggle-reply btn btn-primary mb-3">Reply</button>
-                    <div class="comment-reply">
+                    <div class="comment-reply col-sm-6">
                         <form method="post" action="{{route('admin.comments.reply')}}">
                             @csrf
                             <div class="form-group ms-5">
