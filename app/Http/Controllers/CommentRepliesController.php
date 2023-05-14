@@ -2,50 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateCommentReplyRequest;
+use App\Models\Comment;
 use App\Models\CommentReply;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class CommentRepliesController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
-    }
+        $comment = Comment::findOrFail($id);
+        $replies = $comment->replies()->paginate(5);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+        return view('admin.comments.replies.show', compact('replies'));
     }
 
     /**
@@ -53,7 +26,11 @@ class CommentRepliesController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $reply = CommentReply::findOrFail($id);
+        $is_active = $request->has('approve') ? 1 : 0;
+        $reply->update(['is_active' => $is_active]);
+
+        return back();
     }
 
     /**
@@ -61,12 +38,15 @@ class CommentRepliesController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $reply = CommentReply::findOrFail($id);
+        $reply->delete();
+        return back();
     }
 
-    public function createReply(Request $request) {
-
-        $user = Auth::user();
+    /**
+     * Create the specified resource from storage.
+     */
+    public function createReply(CreateCommentReplyRequest  $request, Authenticatable $user) {
         $data = [
             'comment_id' => $request->comment_id,
             'author' => $user->name,
@@ -77,8 +57,6 @@ class CommentRepliesController extends Controller
         ];
 
         CommentReply::create($data);
-
-        $request->session()->flash('reply-added-message', 'Reply has been added and waiting for being posted by admin.');
 
         return back();
     }

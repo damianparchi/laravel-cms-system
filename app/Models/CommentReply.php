@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Observers\CommentReplyObserver;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -20,5 +21,12 @@ class CommentReply extends Model
 
     public function comment() {
         return $this->belongsTo(Comment::class);
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        CommentReply::observe(CommentReplyObserver::class);
     }
 }
