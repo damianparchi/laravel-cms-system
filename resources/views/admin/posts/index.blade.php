@@ -26,7 +26,7 @@
                                 <th>Author</th>
                                 <th>Title</th>
                                 <th>Comments</th>
-                                <th>Image</th>
+                                <th>Category</th>
                                 <th>Created time</th>
                                 <th>Updated time</th>
                                 <th>Delete</th>
@@ -39,7 +39,7 @@
                                 <th>Author</th>
                                 <th>Title</th>
                                 <th>Comments</th>
-                                <th>Image</th>
+                                <th>Category</th>
                                 <th>Created time</th>
                                 <th>Updated time</th>
                                 <th>Delete</th>
@@ -49,13 +49,20 @@
                             <tbody>
                             @foreach($posts as $post)
                                 <tr>
-                                    <td>{{$post -> id}}</td>
-                                    <td>{{$post -> user -> name}}</td>
-                                    <td><a href="{{route('post', $post->slug)}}">{{$post -> slug}}</a></td>
+                                    <td>{{$post->id}}</td>
+                                    <td>{{$post->user->name}}</td>
+                                    <td><a href="{{route('post', $post->slug)}}">{{$post->slug}}</a></td>
                                     <td><a href="{{route('comments.show', $post)}}">View Comments</a></td>
-                                    <td><img height="40px" src="{{$post->post_image}}" alt=""></td>
-                                    <td>{{$post -> created_at->diffForHumans()}}</td>
-                                    <td>{{$post -> updated_at->diffForHumans()}}</td>
+                                    <td>
+                                        @foreach($post->categories as $category)
+                                            {{$category->name}}
+                                            @if(!$loop->last)
+                                                ,
+                                            @endif
+                                        @endforeach
+                                    </td>
+                                    <td>{{$post->created_at->diffForHumans()}}</td>
+                                    <td>{{$post->updated_at->diffForHumans()}}</td>
                                     <td>
                                         <form action="{{route('post.destroy', $post->id)}}" method="post">
                                             @csrf
@@ -70,6 +77,7 @@
                                     </td>
                                 </tr>
                             @endforeach
+
                             </tbody>
                         </table>
                     </div>

@@ -45,6 +45,11 @@ class Post extends Model
         return $this->hasMany(Comment::class);
     }
 
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, 'categories_posts');
+    }
+
     public function sluggable(): array{
         return [
             'slug' => [

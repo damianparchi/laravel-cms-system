@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 
 
+use App\Models\Category;
 use App\Models\Post;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Support\Facades\Artisan;
@@ -74,7 +75,8 @@ class PostController extends Controller
     }
 
     public function create() {
-        return view ('admin.posts.create');
+        $categories = Category::all();
+        return view ('admin.posts.create', compact('categories'));
     }
     /**
      * Create Post
@@ -137,7 +139,9 @@ class PostController extends Controller
             'title' => 'required | min:6 | max:255',
             'post_image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'body' => 'required',
+            'category' => 'required'
         ]);
+
         $inputs['slug'] = SlugService::createSlug(Post::class, 'slug', request('title'));
         if(request()->hasFile('post_image')){
             $path = request()->file('post_image')->store('images');
@@ -150,7 +154,11 @@ class PostController extends Controller
         }
 
 
-        auth()->user()->posts()->create($inputs);
+        $post = auth()->user()->posts()->create($inputs);
+
+        $category = Category::find(request('category'));
+
+        $post->categories()->attach($category->id);
 
         Session::flash('post-create-message', 'The post '. '<b>'. $inputs['title'] .'</b>' .' has been added.');
 
@@ -159,6 +167,7 @@ class PostController extends Controller
                 'title' => request('title'),
                 'post_image' => request('post_image'),
                 'body' => request('body'),
+                'category' => request('category'),
             ]);
         }
 

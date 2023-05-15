@@ -65,7 +65,7 @@
 
             <x-admin.sidebar.admin-sidebar-users-links></x-admin.sidebar.admin-sidebar-users-links>
             <x-admin.sidebar.authorization-links></x-admin.sidebar.authorization-links>
-
+            <x-admin.sidebar.categories-links></x-admin.sidebar.categories-links>
         @endif
 
         <x-admin.sidebar.comments-links></x-admin.sidebar.comments-links>
