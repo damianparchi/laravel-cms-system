@@ -8,12 +8,17 @@ use Illuminate\Http\Request;
 class CategoriesController extends Controller
 {
     public function index() {
-        $categories = Category::paginate(5);
+        $search = request()->query('search');
+        if($search) {
+            $categories = Category::where('name', 'LIKE', "%{$search}%")->paginate(5);
+        } else {
+            $categories = Category::paginate(5);
+        }
 
         return view('admin.categories.index', compact('categories'));
     }
 
-    public function create(Request $request) {
+    public function store(Request $request) {
         request()->validate([
             'name' => ['required']
         ]);
@@ -23,7 +28,7 @@ class CategoriesController extends Controller
         return back();
     }
 
-    public function delete(Category $category) {
+    public function destroy(Category $category) {
         $category->delete();
         session()->flash('admin.delete', 'Category ' . '<b>' . $category->name . '</b>' . ' has been deleted.');
 

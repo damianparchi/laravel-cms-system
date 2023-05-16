@@ -7,7 +7,7 @@
         <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Custom Components:</h6>
             <a class="collapse-item" href="{{route('admin.categories.create')}}">Create a category</a>
-            <a class="collapse-item" href="{{route('admin.categories')}}">Display all categories</a>
+            <a class="collapse-item" href="{{route('admin.categories.index')}}">Display all categories</a>
         </div>
     </div>
 </li>
