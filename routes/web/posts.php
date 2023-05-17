@@ -1,16 +1,17 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PostController;
 
-Route::get('/blog/post/{slug}', [App\Http\Controllers\PostController::class, 'show'])->name('post');
+Route::get('/blog/post/{slug}', [PostController::class, 'show'])->name('post');
 
 Route::middleware(['auth'])->group(function (){
-    Route::get('/posts', [App\Http\Controllers\PostController::class, 'index'])->name('post.index');
-    Route::get('/posts/create', [App\Http\Controllers\PostController::class, 'create'])->name('post.create');
-    Route::post('/posts', [App\Http\Controllers\PostController::class, 'store'])->name('post.store');
-    Route::delete('/posts/destroy/{post}', [App\Http\Controllers\PostController::class, 'destroy'])->name('post.destroy');
-    Route::get('/posts/edit/{post}', [App\Http\Controllers\PostController::class, 'edit'])->name('post.edit');
-    Route::put('/posts/update/{post}', [App\Http\Controllers\PostController::class, 'update'])->name('post.update');
+    Route::get('/posts', [PostController::class, 'index'])->name('post.index');
+    Route::get('/posts/create', [PostController::class, 'create'])->name('post.create');
+    Route::post('/posts', [PostController::class, 'store'])->name('post.store');
+    Route::delete('/posts/destroy/{post}', [PostController::class, 'destroy'])->name('post.destroy');
+    Route::get('/posts/edit/{post}', [PostController::class, 'edit'])->name('post.edit');
+    Route::put('/posts/update/{post}', [PostController::class, 'update'])->name('post.update');
 });
 
 
